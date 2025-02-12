@@ -3,10 +3,6 @@ from datetime import datetime
 
 # Davi
 
-# Função global para obter a data e hora atual do sistema
-def obter_data_hora_atual():
-    return datetime.today()
-
 # Classe Perfil que representa um perfil de usuário
 class Perfil():
     def __init__(self, usuario, seguidos=None, seguidores=None, tweets=None, ativo=True):
