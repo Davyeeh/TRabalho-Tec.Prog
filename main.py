@@ -74,11 +74,11 @@ class Perfil():
     # Método para adicionar um tweet à lista do perfil
     def add_tweet(self, tweet):
         self.__tweets.append(tweet)
-        self.__tweets.sort(key=lambda t: t.get_data_postagem())  # Ordena os tweets pela data
+        self.__tweets.sort(key=lambda tweet: tweet.get_data_postagem())  # Ordena os tweets pela data
     
     # Método para obter todos os tweets do perfil, ordenados por data
     def get_tweets(self):
-        return sorted(self.__tweets, key=lambda t: t.get_data_postagem())
+        return sorted(self.__tweets, key=lambda tweet: tweet.get_data_postagem())
     
     # Método para obter um tweet específico pelo ID
     def get_tweet(self, tweet_id):
@@ -92,7 +92,7 @@ class Perfil():
         timeline = self.__tweets[:]  # Copia os tweets do próprio perfil
         for perfil in self.__seguidos:
             timeline.extend(perfil.__tweets)  # Adiciona tweets dos perfis seguidos
-        timeline.sort(key=lambda tweet: tweet['data'])  # Ordena os tweets pela data de postagem
+        timeline.sort(key=lambda tweet: tweet.get_data_postagem())  # Ordena os tweets pela data de postagem
         return timeline
 
     # Método para definir o nome de usuário
@@ -162,10 +162,6 @@ class RepositorioUsuarios():
                 self.__usuarios[i] = perfil  # Atualiza os dados do perfil
                 return
         raise UNCException("Usuário não cadastrado")  # Lança exceção se não encontrar
-
-
-
-
 
 class MyTwitter:
     def __init__(self):
