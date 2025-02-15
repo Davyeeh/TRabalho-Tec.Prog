@@ -34,7 +34,7 @@ class Tweet:
         self.__id = next(gerador_id) # Gera o ID único usando a função geradora
         self.__usuario = usuario # Nome do usuário que postou
         self.__mensagem = mensagem # Conteúdo do tweet
-        self.__data_postagem = datetime.now().replace(second=0, microsecond=0) # Data e hora da postagem geradas automaticamente
+        self.__data_postagem = datetime.today().replace(second=0, microsecond=0) # Data e hora da postagem geradas automaticamente
         
     # Métodos de acesso (getters)
 
@@ -54,7 +54,7 @@ class Tweet:
 
 # Classe Perfil que representa um perfil de usuário
 class Perfil():
-    def __init__(self, usuario, seguidos=None, seguidores=None, tweets=None, ativo=True):
+    def __init__(self, usuario):
         self.__usuario = usuario  # Nome de usuário do perfil
         self.__seguidos = []  # Perfis seguidos pelo usuário
         self.__seguidores = []  # Perfis que seguem o usuário
@@ -80,6 +80,14 @@ class Perfil():
     def get_tweets(self):
         return sorted(self.__tweets, key=lambda tweet: tweet.get_data_postagem())
     
+    # Método para obter a lista de perfis seguidos
+    def get_seguidos(self):
+        return self.__seguidos
+
+    # Método para obter a lista de seguidores
+    def get_seguidores(self):
+        return self.__seguidores
+
     # Método para obter um tweet específico pelo ID
     def get_tweet(self, tweet_id):
         for tweet in self.__tweets:
