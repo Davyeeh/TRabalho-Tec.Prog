@@ -1,6 +1,5 @@
 from datetime import datetime
 from exception import PEException, PIException, PDException, MFPException, SIException, UJCException, UNCException
-
 # Início das classes
 
 #Gabriel
@@ -162,6 +161,15 @@ class MyTwitter:
         while True:
             yield id
             id += 1
+    
+    def verificar_cpf_cnpj_existente(self, cpf_cnpj):
+        """Verifica se um CPF ou CNPJ já está cadastrado."""
+        for usuario in self.__repositorio._RepositorioUsuarios__usuarios:
+            if isinstance(usuario, PessoaFisica) and usuario.get_cpf() == cpf_cnpj:
+                return True
+            elif isinstance(usuario, PessoaJuridica) and usuario.get_cnpj() == cpf_cnpj:
+                return True
+        return False
         
     def criar_perfil(self, perfil):
         """ Cadastra um perfil no repositório, garantindo que não haja duplicatas. """
