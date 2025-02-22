@@ -1,5 +1,29 @@
 from datetime import datetime
-from exception import PEException, PIException, PDException, MFPException, SIException, UJCException, UNCException
+
+# Exceções específicas do sistema
+
+class PEException(Exception):  # Perfil Existente
+    pass
+
+class PIException(Exception):  # Perfil Inexistente
+    pass
+
+class PDException(Exception):  # Perfil Desativado
+    pass
+
+class MFPException(Exception):  # Mensagem Fora do Padrão
+    pass
+
+class SIException(Exception):  # Seguidor Inválido
+    pass
+
+# Exceção para usuário já cadastrado
+class UJCException(Exception):
+    pass
+
+class UNCException(Exception):  # Usuário Não Cadastrado
+    pass
+
 
 # Início das classes
 
@@ -29,7 +53,7 @@ class Tweet:
 # Davi
 
 # Classe Perfil que representa um perfil de usuário
-class Perfil():
+class Perfil:
     def __init__(self, usuario):
         self.__usuario = usuario  # Nome de usuário do perfil
         self.__seguidos = []  # Perfis seguidos pelo usuário
@@ -42,7 +66,7 @@ class Perfil():
         if perfil not in self.__seguidores:
             self.__seguidores.append(perfil)
     
-     # Método para seguir outro perfil
+    # Método para seguir outro perfil
     def add_seguidos(self, perfil):
         if perfil not in self.__seguidos:
             self.__seguidos.append(perfil)
@@ -75,9 +99,14 @@ class Perfil():
     def get_timeline(self):
         timeline = self.__tweets[:]  # Copia os tweets do próprio perfil
         for perfil in self.__seguidos:
-            timeline.extend(perfil.__tweets)  # Adiciona tweets dos perfis seguidos
+            timeline.extend(perfil.get_tweets())  # Adiciona tweets dos perfis seguidos
         timeline.sort(key=lambda tweet: tweet.get_data_postagem())  # Ordena os tweets pela data de postagem
         return timeline
+
+    # Método para seguir outro perfil
+    def seguir(self, perfil):
+        self.add_seguidos(perfil)
+        perfil.add_seguidor(self)
 
     # Método para definir o nome de usuário
     def set_usuario(self, usuario):
@@ -94,7 +123,7 @@ class Perfil():
     # Método para verificar se o perfil está ativo
     def is_ativo(self):
         return self.__ativo
-
+    
 # Classe PessoaFisica que represenra um perfil de pessoa física
 class PessoaFisica(Perfil):
     def __init__(self, usuario, cpf):
@@ -150,6 +179,13 @@ class RepositorioUsuarios():
 class MyTwitter:
     def __init__(self):
         self.__repositorio = RepositorioUsuarios()  # Repositório para armazenar os perfis
+        self.__gerador_id = self.__gerador_id_func()  # Inicializa o gerador de IDs
+
+    def __gerador_id_func(self):
+        id = 1
+        while True:
+            yield id
+            id += 1
         
     def criar_perfil(self, perfil):
         """ Cadastra um perfil no repositório, garantindo que não haja duplicatas. """
